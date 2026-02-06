@@ -218,6 +218,36 @@
       </button>
     </div>
 
+    <!-- POPUP: Konfirmasi Nama Rahasia -->
+    <div
+      id="secret-name-popup"
+      class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+    >
+      <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-sm w-[85%] text-center mx-4 transform scale-100">
+        <div class="text-5xl mb-4">🤫</div>
+        <h2 class="text-xl font-bold text-pink-600 mb-2">
+          Jadi namanya rahasia nih?
+        </h2>
+        <p class="text-gray-500 text-sm mb-6">
+          Kamu belum kasih tau nama kamu nih 😅
+        </p>
+        <div class="flex gap-3">
+          <button
+            onclick="useSecretName()"
+            class="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold py-2 px-4 rounded-full shadow transition hover:scale-105"
+          >
+            Iya 😉
+          </button>
+          <button
+            onclick="backToNameInput()"
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded-full shadow transition hover:scale-105"
+          >
+            Enggak 😅
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- STAGE 1: The Intro -->
     <div
       id="intro-card"
@@ -338,8 +368,40 @@
       // Save name and proceed
       function saveName() {
         const input = document.getElementById("name-input");
-        userName = input.value.trim() || "Kamu";
+        const enteredName = input.value.trim();
         
+        // Kalau nama kosong, tampilkan popup konfirmasi
+        if (!enteredName) {
+          showSecretNamePopup();
+          return;
+        }
+        
+        userName = enteredName;
+        proceedToIntro();
+      }
+      
+      // Tampilkan popup rahasia
+      function showSecretNamePopup() {
+        const popup = document.getElementById("secret-name-popup");
+        popup.classList.remove("hidden");
+        popup.classList.add("fade-in");
+      }
+      
+      // Gunakan nama rahasia (Kamu)
+      function useSecretName() {
+        userName = "Kamu";
+        document.getElementById("secret-name-popup").classList.add("hidden");
+        proceedToIntro();
+      }
+      
+      // Balik ke input nama
+      function backToNameInput() {
+        document.getElementById("secret-name-popup").classList.add("hidden");
+        document.getElementById("name-input").focus();
+      }
+      
+      // Lanjut ke intro card
+      function proceedToIntro() {
         // Update personalized messages
         messages[0] = `Hei ${userName} yang cantik...`;
         
